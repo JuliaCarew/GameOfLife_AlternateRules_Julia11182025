@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46684702241a08045b95c0f6b9fb8df8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedRuleSet: 2
+  selectedRuleSet: 4
   birthNeighbors: 0300000004000000
   surviveNeighbors: 0500000004000000
 --- !u!1660057539 &9223372036854775807

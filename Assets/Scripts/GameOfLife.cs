@@ -26,6 +26,7 @@ public class GameOfLife : MonoBehaviour
     private Cell[,] cellObjects;
     private bool isRunning = false;
     private Coroutine simulationCoroutine;
+    private int generation;
 
     #endregion
 
@@ -155,6 +156,9 @@ public class GameOfLife : MonoBehaviour
                 cellObjects[x, y].SetState(currentGrid[x, y]);
             }
         }
+
+        generation++;
+        Debug.Log($"generation: {generation}");
     }
 
     int CountNeighbors(int x, int y)
@@ -197,7 +201,7 @@ public class GameOfLife : MonoBehaviour
             }
             else
             {
-                StartSimulation();
+                StartSimulation();                
             }
         }
         
@@ -206,5 +210,18 @@ public class GameOfLife : MonoBehaviour
         {
             UpdateGrid();
         }
+
+        // restart simulation
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Restart();
+        }
+    }
+
+    void Restart()
+    {
+        InitializeGrid();
+        CreateCellObjects();
+        StartSimulation();
     }
 }
