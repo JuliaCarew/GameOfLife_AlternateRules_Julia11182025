@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameOfLife : MonoBehaviour
 {
+    #region Variables
+
     [Header("Grid Settings")]
     [SerializeField] private int gridWidth = 50;
     [SerializeField] private int gridHeight = 50;
@@ -25,6 +27,8 @@ public class GameOfLife : MonoBehaviour
     private bool isRunning = false;
     private Coroutine simulationCoroutine;
 
+    #endregion
+
     void Start()
     {
         InitializeGrid();
@@ -42,7 +46,7 @@ public class GameOfLife : MonoBehaviour
         nextGrid = new bool[gridWidth, gridHeight];
         cellObjects = new Cell[gridWidth, gridHeight];
         
-        // Random initial state
+        // random initial state
         for (int x = 0; x < gridWidth; x++)
         {
             for (int y = 0; y < gridHeight; y++)
@@ -54,12 +58,6 @@ public class GameOfLife : MonoBehaviour
 
     void CreateCellObjects()
     {
-        // Create cell prefab if it doesn't exist
-        if (cellPrefab == null)
-        {
-            cellPrefab = CreateDefaultCellPrefab();
-        }
-
         Vector3 startPos = transform.position;
         startPos.x -= (gridWidth * cellSize) / 2f;
         startPos.y -= (gridHeight * cellSize) / 2f;
@@ -83,24 +81,6 @@ public class GameOfLife : MonoBehaviour
                 cell.SetState(currentGrid[x, y]);
             }
         }
-    }
-
-    GameObject CreateDefaultCellPrefab()
-    {
-        GameObject prefab = new GameObject("CellPrefab");
-        SpriteRenderer sr = prefab.AddComponent<SpriteRenderer>();
-        sr.sprite = CreateSquareSprite();
-        sr.color = Color.white;
-        prefab.transform.localScale = Vector3.one * cellSize;
-        return prefab;
-    }
-
-    Sprite CreateSquareSprite()
-    {
-        Texture2D texture = new Texture2D(1, 1);
-        texture.SetPixel(0, 0, Color.white);
-        texture.Apply();
-        return Sprite.Create(texture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f));
     }
 
     public void StartSimulation()
@@ -135,10 +115,10 @@ public class GameOfLife : MonoBehaviour
 
     void UpdateGrid()
     {
-        // Check for alternate rules component
+        // check for alternate rules
         AlternateRules alternateRules = GetComponent<AlternateRules>();
         
-        // Calculate next generation
+        // calculate next generation
         for (int x = 0; x < gridWidth; x++)
         {
             for (int y = 0; y < gridHeight; y++)
@@ -146,14 +126,14 @@ public class GameOfLife : MonoBehaviour
                 int neighbors = CountNeighbors(x, y);
                 bool isAlive = currentGrid[x, y];
                 
-                // Use alternate rules if available, otherwise use Conway's rules
+                // use alternate rules if available, otherwise use default rules
                 if (alternateRules != null && alternateRules.enabled)
                 {
                     nextGrid[x, y] = alternateRules.EvaluateCell(isAlive, neighbors);
                 }
                 else
                 {
-                    // Conway's rules (B3/S23)
+                    // default rules (B3/S23)
                     if (isAlive)
                     {
                         nextGrid[x, y] = (neighbors == 2 || neighbors == 3);
@@ -166,7 +146,7 @@ public class GameOfLife : MonoBehaviour
             }
         }
 
-        // Update current grid and visual representation
+        // update current grid and visuals
         for (int x = 0; x < gridWidth; x++)
         {
             for (int y = 0; y < gridHeight; y++)
@@ -190,7 +170,7 @@ public class GameOfLife : MonoBehaviour
                 int nx = x + i;
                 int ny = y + j;
                 
-                // Wrap around edges (toroidal topology)
+                // wrap around edges
                 if (nx < 0) nx = gridWidth - 1;
                 if (nx >= gridWidth) nx = 0;
                 if (ny < 0) ny = gridHeight - 1;
@@ -208,7 +188,7 @@ public class GameOfLife : MonoBehaviour
 
     void Update()
     {
-        // Toggle simulation with Space key
+        // toggle simulation with Space 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isRunning)
@@ -221,7 +201,7 @@ public class GameOfLife : MonoBehaviour
             }
         }
         
-        // Step one generation with S key
+        // step one generation with S key
         if (Input.GetKeyDown(KeyCode.S))
         {
             UpdateGrid();

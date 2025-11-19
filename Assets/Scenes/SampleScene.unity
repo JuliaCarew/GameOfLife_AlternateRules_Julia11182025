@@ -370,9 +370,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bca4ff8f4b7b9ef41b1c9e878a428584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 50
-  gridHeight: 50
-  cellSize: 0.5
+  gridWidth: 150
+  gridHeight: 100
+  cellSize: 0.2
   updateInterval: 0.1
   autoStart: 1
   cellPrefab: {fileID: 5746086648268321634, guid: b9600046cb5ca0d4fa3f981ed645a0e4, type: 3}
@@ -406,8 +406,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedRuleSet: 2
-  birthNeighbors: 0300000006000000
-  surviveNeighbors: 0200000003000000
+  birthNeighbors: 0300000004000000
+  surviveNeighbors: 0500000004000000
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

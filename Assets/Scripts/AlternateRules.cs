@@ -4,23 +4,24 @@ using System.Collections.Generic;
 public class AlternateRules : MonoBehaviour
 {
     [Header("Rule Selection")]
-    [SerializeField] private RuleSet selectedRuleSet = RuleSet.HighLife;
+    [SerializeField] private RuleSet selectedRuleSet = RuleSet.Conway;
     
-    [Header("Custom Rules (if Custom is selected)")]
+    [Header("Custom Rules")]
     [SerializeField] private List<int> birthNeighbors = new List<int> { 3, 6 };
     [SerializeField] private List<int> surviveNeighbors = new List<int> { 2, 3 };
     
+    // RULES
     public enum RuleSet
     {
         Conway,        // B3/S23 - Classic Conway's Game of Life
-        HighLife,      // B36/S23 - Similar to Conway, creates replicators
+        HighLife,      // B36/S23 
         Mazectric,     // B3/S1234 - Creates maze-like patterns
-        Custom         // Use custom birth/survive neighbor counts
+        Static,        // B14/S45 - persistent noise 
+        Custom         
     }
 
     void Start()
     {
-        // Initialize default custom rules if needed
         if (selectedRuleSet == RuleSet.Custom && birthNeighbors.Count == 0)
         {
             birthNeighbors.Add(3);
@@ -31,27 +32,34 @@ public class AlternateRules : MonoBehaviour
 
     public bool EvaluateCell(bool isAlive, int neighborCount)
     {
-        List<int> birthList;
-        List<int> surviveList;
+        List<int> birthList; // amount that causes cell to appear/be alive
+        List<int> surviveList; // amount that allows a cell to continue survuving
 
-        // Get rule set based on selection
+        // get rules based on selection
         switch (selectedRuleSet)
         {
             case RuleSet.Conway:
+                // B3/S23 - classic
                 birthList = new List<int> { 3 };
                 surviveList = new List<int> { 2, 3 };
                 break;
 
             case RuleSet.HighLife:
-                // B36/S23 - Creates replicators and interesting oscillators
+                // B36/S23 
                 birthList = new List<int> { 3, 6 };
                 surviveList = new List<int> { 2, 3 };
                 break;
 
             case RuleSet.Mazectric:
-                // B3/S1234 - Creates maze-like patterns
+                // B3/S1234 - maze-like patterns
                 birthList = new List<int> { 3 };
                 surviveList = new List<int> { 1, 2, 3, 4 };
+                break;
+
+            case RuleSet.Static:
+                // B14/S45 - persistent noise 
+                birthList = new List<int> { 1, 4 };
+                surviveList = new List<int> { 4, 5 };
                 break;
 
             case RuleSet.Custom:
@@ -65,7 +73,7 @@ public class AlternateRules : MonoBehaviour
                 break;
         }
 
-        // Evaluate cell state
+        // evaluate cell state
         if (isAlive)
         {
             return surviveList.Contains(neighborCount);
@@ -73,23 +81,6 @@ public class AlternateRules : MonoBehaviour
         else
         {
             return birthList.Contains(neighborCount);
-        }
-    }
-
-    public string GetRuleSetDescription()
-    {
-        switch (selectedRuleSet)
-        {
-            case RuleSet.Conway:
-                return "B3/S23 - Classic Conway's Game of Life";
-            case RuleSet.HighLife:
-                return "B36/S23 - Creates replicators";
-            case RuleSet.Mazectric:
-                return "B3/S1234 - Maze-like patterns";
-            case RuleSet.Custom:
-                return "Custom rules";
-            default:
-                return "Unknown";
         }
     }
 }
